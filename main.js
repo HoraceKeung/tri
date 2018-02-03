@@ -19,11 +19,11 @@ const server = http.createServer(nuxt.render)
 
 // Build only in dev mode
 if (config.dev) {
-  builder.build()
-  .catch((error) => {
-    console.error(error) // eslint-disable-line no-console
-    process.exit(1)
-  })
+	builder.build()
+	.catch((error) => {
+		console.error(error) // eslint-disable-line no-console
+		process.exit(1)
+	})
 }
 
 // Listen the server
@@ -40,33 +40,33 @@ const url = require('url')
 
 const POLL_INTERVAL = 300
 const pollServer = () => {
-  http.get(_NUXT_URL_, (res) => {
-    const SERVER_DOWN = res.statusCode !== 200
-    SERVER_DOWN ? setTimeout(pollServer, POLL_INTERVAL) : win.loadURL(_NUXT_URL_)
-  })
-  .on('error', pollServer)
+	http.get(_NUXT_URL_, (res) => {
+		const SERVER_DOWN = res.statusCode !== 200
+		SERVER_DOWN ? setTimeout(pollServer, POLL_INTERVAL) : win.loadURL(_NUXT_URL_)
+	})
+	.on('error', pollServer)
 }
 
 const app = electron.app
 const bw = electron.BrowserWindow
 
 const newWin = () => {
-  win = new bw({
-	  icon: path.join(__dirname, 'assets/icons/512x512.png')
-  })
-  win.maximize()
-  if (config.dev) {
-    win.webContents.openDevTools()
-  } else {
-	return win.loadURL(_NUXT_URL_)
-  }
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
-  win.on('closed', () => win = null)
-  pollServer()
+	win = new bw({
+		icon: path.join(__dirname, 'assets/icons/icon.png')
+	})
+	win.maximize()
+	if (config.dev) {
+		win.webContents.openDevTools()
+	} else {
+		return win.loadURL(_NUXT_URL_)
+	}
+	win.loadURL(url.format({
+		pathname: path.join(__dirname, 'index.html'),
+		protocol: 'file:',
+		slashes: true
+	}))
+	win.on('closed', () => win = null)
+	pollServer()
 }
 
 app.on('ready', newWin)

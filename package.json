@@ -1,14 +1,14 @@
 {
-  "name": "tri",
+  "name": "TRI",
   "version": "1.0.0",
-  "description": "Nuxt + Electron + Pixi",
+  "description": "TRI",
   "author": "Horace Keung",
   "private": true,
   "main": "main.js",
   "build": {
     "appId": "com.nuxtron.tri",
 	"directories": {
-		"buildResources": "assets/icons"
+	  "buildResources": "assets/icons"
 	}
   },
   "scripts": {
