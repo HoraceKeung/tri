@@ -52,6 +52,8 @@ const bw = electron.BrowserWindow
 
 const newWin = () => {
 	win = new bw({
+		minWidth: 1170,
+		minHeight: 660,
 		icon: path.join(__dirname, 'assets/icons/icon.png')
 	})
 	win.maximize()

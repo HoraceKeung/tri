@@ -7,9 +7,9 @@
   "main": "main.js",
   "build": {
     "appId": "com.nuxtron.tri",
-	"directories": {
-	  "buildResources": "assets/icons"
-	}
+    "directories": {
+      "buildResources": "assets/icons"
+    }
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron .",
@@ -23,6 +23,7 @@
     "deepmerge": "^2.0.1",
     "jquery": "^3.3.1",
     "nuxt": "^1.2.1",
+    "pixi.js": "^4.7.0",
     "popper.js": "^1.12.9"
   },
   "devDependencies": {

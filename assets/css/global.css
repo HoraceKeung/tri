@@ -13,6 +13,7 @@ html {
 }
 body {
 	font-family: VT323;
+	overflow-y: hidden;
 }
 *, *:before, *:after {
 	box-sizing: border-box;
