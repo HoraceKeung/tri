@@ -15,6 +15,7 @@
 <script>
 import * as PIXI from 'pixi.js'
 import collide from 'triangle-circle-collision'
+import cryptoJSON from '~/assets/js/cryptoJson'
 export default {
 	computed: {
 		kills () { return this.$store.state.kills.toString().split('') },
@@ -76,6 +77,7 @@ export default {
 								f.sprite.y = this.foeR
 								f.sprite.x = -2 * this.foeR
 								this.$store.commit('setKills', this.$store.state.kills + 1)
+								this.saveGame()
 							}
 						})
 					}
@@ -165,6 +167,7 @@ export default {
 		},
 		playerGetHit () {
 			this.$store.commit('setDeaths', this.$store.state.deaths + 1)
+			this.saveGame()
 			this.player.invincible = true
 			const invincibleInterval = setInterval(() => {
 				this.player.sprite.alpha = this.player.sprite.alpha === 0.5 ? 1 : 0.5
@@ -196,6 +199,12 @@ export default {
 					dead.sprite.y = this.player.sprite.y - this.playerSize / 2
 				}
 			}
+		},
+		saveGame () {
+			this.$store.commit('setSave', cryptoJSON.encrypt({
+				kills: this.$store.state.kills,
+				deaths: this.$store.state.deaths
+			}, this.$store.state.key))
 		}
 	},
 	data () {

@@ -6,3 +6,16 @@
 		</div>
 	</section>
 </template>
+
+<script>
+import cryptoJSON from '~/assets/js/cryptoJson'
+export default {
+	created () {
+		if (this.$store.state.save) {
+			const save = cryptoJSON.decrypt(this.$store.state.save, this.$store.state.key)
+			this.$store.commit('setKills', save.kills)
+			this.$store.commit('setDeaths', save.deaths)
+		}
+	}
+}
+</script>

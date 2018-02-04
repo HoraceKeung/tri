@@ -15,7 +15,8 @@ export const plugins = [persist.subscribe()]
 export const state = () => ({
 	kills: 0,
 	deaths: 0,
-	save: null
+	save: null,
+	key: '394rwe78fudhwqpwriufdhr8ehyqr9pe8fud'
 })
 
 export const mutations = {
