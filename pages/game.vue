@@ -82,6 +82,15 @@ export default {
 						})
 					}
 				})
+				// Update foe bullets
+				this.foeBullets.forEach(fb => {
+					if (!fb.dead) {
+						fb.sprite.x += fb.movement.x * delta * this.bulletSpeed / 2
+						fb.sprite.y += fb.movement.y * delta * this.bulletSpeed / 2
+						if ((fb.sprite.x - this.foeR / 2) > this.appW || (fb.sprite.x + this.foeR / 2) < 0 || (fb.sprite.y - this.foeR / 2) > this.appH || (fb.sprite.y + this.foeR / 2) < 0) { fb.dead = true }
+						if (!this.player.invincible && collide(this.computeTri(this.player.sprite, this.playerSize), [fb.sprite.x, fb.sprite.y], this.foeR / 2)) { this.playerGetHit() }
+					}
+				})
 			})
 		})
 	},
@@ -134,14 +143,36 @@ export default {
 		ai () {
 			this.foes.forEach(f => {
 				if (f.alive) {
-					if (Math.random() > 0.5) { f.movement = this.directions[Math.floor(Math.random() * this.directions.length)] }
+					if (Math.random() > 0.5) { f.movement = JSON.parse(JSON.stringify(this.directions[Math.floor(Math.random() * this.directions.length)])) }
+					if (Math.random() > 0.5) {
+						const dead = this.foeBullets.find(b => { return b.dead })
+						if (typeof dead === 'undefined') {
+							const foeBulletSprite = new PIXI.Sprite(this.foeTexture)
+							foeBulletSprite.anchor.set(0.5)
+							foeBulletSprite.scale.x *= 0.5
+							foeBulletSprite.scale.y *= 0.5
+							foeBulletSprite.x = f.sprite.x
+							foeBulletSprite.y = f.sprite.y
+							this.foeBullets.push({
+								sprite: foeBulletSprite,
+								dead: false,
+								movement: this.directions[Math.floor((Math.random() * 8) + 1)]
+							})
+							this.app.stage.addChild(foeBulletSprite)
+						} else {
+							dead.sprite.x = f.sprite.x
+							dead.sprite.y = f.sprite.y
+							dead.dead = false
+							dead.movement = this.directions[Math.floor((Math.random() * 8) + 1)]
+						}
+					}
 				}
 			})
 		},
 		makePlayer (graphics) {
 			graphics.beginFill(0xffffff)
 			graphics.lineStyle(1, 0xffffff, 1)
-			graphics.moveTo(this.playerSize / 2, 0);
+			graphics.moveTo(this.playerSize / 2, 0)
 			graphics.lineTo(this.playerSize, this.playerSize)
 			graphics.lineTo(0, this.playerSize)
 			graphics.lineTo(this.playerSize / 2, 0)
@@ -184,8 +215,8 @@ export default {
 				if (typeof dead === 'undefined') {
 					const bulletSprite = new PIXI.Sprite(this.playerTexture)
 					bulletSprite.anchor.set(0.5)
-					bulletSprite.scale.x *= 0.5;
-		    		bulletSprite.scale.y *= 0.5;
+					bulletSprite.scale.x *= 0.5
+		    		bulletSprite.scale.y *= 0.5
 					bulletSprite.x = this.player.sprite.x
 					bulletSprite.y = this.player.sprite.y - this.playerSize / 2
 					this.playerBullets.push({
@@ -219,10 +250,11 @@ export default {
 			foeAiInterval: null,
 			foeTexture: null,
 			foes: [],
+			foeBullets: [],
 			playerSize: 30,
 			playerTexture: null,
 			player: null,
-			playerSpeed: 3,
+			playerSpeed: 5,
 			fireRate: 3,
 			playerBullets: [],
 			bulletSpeed: 10,
